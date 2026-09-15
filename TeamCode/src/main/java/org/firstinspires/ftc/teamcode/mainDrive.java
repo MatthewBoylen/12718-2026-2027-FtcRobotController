@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp(name="Drive", group="Drive")
-public class Drive extends LinearOpMode {
+@TeleOp(name="mainDrive", group="mainDrive")
+public class mainDrive extends LinearOpMode {
     private DcMotor frontLeft, backLeft, frontRight, backRight;
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
