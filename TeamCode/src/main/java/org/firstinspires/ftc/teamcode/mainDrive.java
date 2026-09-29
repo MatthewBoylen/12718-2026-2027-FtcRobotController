@@ -58,37 +58,38 @@ public class mainDrive extends LinearOpMode {
         waitForStart();
 
 
-        if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
-            powerLevel--;
-            spinnerTimer=getRuntime();
-        } else if (this.gamepad2.right_bumper && powerLevel<7 && spinnerTimer==0) {
-            powerLevel++;
-            spinnerTimer=getRuntime();
-        }
-        if (getRuntime()-spinnerTimer>=0.4){
-            spinnerTimer=0;
-        }
-
-        if (powerLevel==0){
-            spinner.setPower(0);
-        }else if (powerLevel==1){
-            spinner.setPower(spinnerLow);
-        }else if(powerLevel ==2){
-            spinner.setPower(spinnerMediumLow);
-        } else if (powerLevel==3){
-            spinner.setPower(spinnerMedium);
-        }else if (powerLevel==4){
-            spinner.setPower(spinnerMediumHigh);
-        }else if (powerLevel==5){
-            spinner.setPower(spinnerHigh);
-        }else if (powerLevel==6){
-            spinner.setPower(spinnerHighMax);
-        }else if (powerLevel==7){
-            spinner.setPower(spinnerMax);
-        }
-
         if (opModeIsActive()){
             while (opModeIsActive()) {
+
+                if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
+                    powerLevel--;
+                    spinnerTimer=getRuntime();
+                } else if (this.gamepad2.right_bumper && powerLevel<7 && spinnerTimer==0) {
+                    powerLevel++;
+                    spinnerTimer=getRuntime();
+                }
+                if (getRuntime()-spinnerTimer>=0.4){
+                    spinnerTimer=0;
+                }
+
+                if (powerLevel==0){
+                    spinner.setPower(0);
+                }else if (powerLevel==1){
+                    spinner.setPower(spinnerLow);
+                }else if(powerLevel ==2){
+                    spinner.setPower(spinnerMediumLow);
+                } else if (powerLevel==3){
+                    spinner.setPower(spinnerMedium);
+                }else if (powerLevel==4){
+                    spinner.setPower(spinnerMediumHigh);
+                }else if (powerLevel==5){
+                    spinner.setPower(spinnerHigh);
+                }else if (powerLevel==6){
+                    spinner.setPower(spinnerHighMax);
+                }else if (powerLevel==7){
+                    spinner.setPower(spinnerMax);
+                }
+
                 direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
                 turn = -gamepad1.right_stick_x;
                 speed = Math.sqrt((gamepad1.left_stick_y * gamepad1.left_stick_y) + (gamepad1.left_stick_x * gamepad1.left_stick_x));
@@ -116,7 +117,5 @@ public class mainDrive extends LinearOpMode {
         VisionPortal visionPortal = builder.build();
         visionPortal.setProcessorEnabled(aprilTag, true);
     }
-    private void alignWithBasket(){
 
-    }
 }

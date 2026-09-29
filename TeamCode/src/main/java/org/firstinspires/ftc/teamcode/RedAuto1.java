@@ -70,10 +70,4 @@ public class RedAuto1 extends LinearOpMode {
         VisionPortal visionPortal = builder.build();
         visionPortal.setProcessorEnabled(aprilTag, true);
     }
-    private void getBasket(){
-        List<AprilTagDetection> ad = aprilTag.getDetections();
-        for(AprilTagDetection tag : ad){
-
-        }
-    }
 }
