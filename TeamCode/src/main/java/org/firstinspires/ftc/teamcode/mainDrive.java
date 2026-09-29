@@ -20,7 +20,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name="mainDrive", group="mainDrive")
 public class mainDrive extends LinearOpMode {
-    private DcMotor frontLeft, backLeft, frontRight, backRight;
+    private DcMotor frontLeft, backLeft, frontRight, backRight, spinner;
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
@@ -30,6 +30,7 @@ public class mainDrive extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
+        spinner = hardwareMap.get(DcMotor.class, "spinner");
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
@@ -40,10 +41,51 @@ public class mainDrive extends LinearOpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         double direction, turn, speed;//for the movement of the robot
 
+        int powerLevel=0;
+        double spinnerTimer=0;
+
+        double spinnerMax=0.8;
+        double spinnerHighMax=0.75;
+        double spinnerHigh=0.7;
+        double spinnerMediumHigh=0.65;
+        double spinnerMedium=0.6;
+        double spinnerMediumLow=0.55;
+        double spinnerLow=0.5;
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         initAprilTag();
         waitForStart();
+
+
+        if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
+            powerLevel--;
+            spinnerTimer=getRuntime();
+        } else if (this.gamepad2.right_bumper && powerLevel<7 && spinnerTimer==0) {
+            powerLevel++;
+            spinnerTimer=getRuntime();
+        }
+        if (getRuntime()-spinnerTimer>=0.4){
+            spinnerTimer=0;
+        }
+
+        if (powerLevel==0){
+            spinner.setPower(0);
+        }else if (powerLevel==1){
+            spinner.setPower(spinnerLow);
+        }else if(powerLevel ==2){
+            spinner.setPower(spinnerMediumLow);
+        } else if (powerLevel==3){
+            spinner.setPower(spinnerMedium);
+        }else if (powerLevel==4){
+            spinner.setPower(spinnerMediumHigh);
+        }else if (powerLevel==5){
+            spinner.setPower(spinnerHigh);
+        }else if (powerLevel==6){
+            spinner.setPower(spinnerHighMax);
+        }else if (powerLevel==7){
+            spinner.setPower(spinnerMax);
+        }
 
         if (opModeIsActive()){
             while (opModeIsActive()) {
