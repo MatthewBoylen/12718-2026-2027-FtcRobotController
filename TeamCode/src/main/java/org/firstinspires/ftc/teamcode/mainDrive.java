@@ -20,7 +20,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name="mainDrive", group="mainDrive")
 public class mainDrive extends LinearOpMode {
-    private DcMotor frontLeft, backLeft, frontRight, backRight, spinner;
+    private DcMotor frontLeft, backLeft, frontRight, backRight, spinner, intake;
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
@@ -31,6 +31,7 @@ public class mainDrive extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
         spinner = hardwareMap.get(DcMotor.class, "spinner");
+        intake = hardwareMap.get(DcMotor.class, "intake");
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
@@ -60,6 +61,14 @@ public class mainDrive extends LinearOpMode {
 
         if (opModeIsActive()){
             while (opModeIsActive()) {
+
+                if(this.gamepad2.x){
+                    intake.setPower(1);
+                }
+                else{
+                    intake.setPower(-1);
+                }
+
 
                 if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
                     powerLevel--;
