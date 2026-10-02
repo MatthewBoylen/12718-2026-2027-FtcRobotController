@@ -14,7 +14,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @TeleOp(name="pidfTest", group="test")
 public class pidfTest extends LinearOpMode {
     private DcMotorEx spinner;
-    private AprilTagProcessor aprilTag;
 
     @Override
     public void runOpMode() {
@@ -22,13 +21,11 @@ public class pidfTest extends LinearOpMode {
         spinner.setDirection(DcMotor.Direction.REVERSE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        double spinnerP = 32767.0/2400.0, spinnerI = 1, spinnerD = 1, spinnerF = 0;
+        double spinnerP = 0, spinnerI = 0, spinnerD = 0, spinnerF = 0;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
-        double direction, turn, speed;//for the movement of the robot
 
-        int powerLevel = 0;
         double spinnerTimer = 0;
 
         telemetry.addData("Status", "Initialized");
@@ -38,7 +35,7 @@ public class pidfTest extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                spinner.setVelocity(2800);
+                spinner.setVelocity(1680);
                 telemetry.addData("Speed", spinner.getVelocity());
                 telemetry.update();
             }
