@@ -21,7 +21,7 @@ public class pidfTest extends LinearOpMode {
         spinner.setDirection(DcMotor.Direction.REVERSE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        double spinnerP = 0, spinnerI = 0, spinnerD = 0, spinnerF = 0;
+        double spinnerP = 0, spinnerI = 0, spinnerD = 0, spinnerF = 14;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
@@ -37,6 +37,7 @@ public class pidfTest extends LinearOpMode {
             while (opModeIsActive()) {
                 spinner.setVelocity(1680);
                 telemetry.addData("Speed", spinner.getVelocity());
+                telemetry.addData("Power", spinner.getPower());
                 telemetry.update();
             }
         }
