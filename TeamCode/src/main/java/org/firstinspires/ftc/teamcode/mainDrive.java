@@ -55,13 +55,13 @@ public class mainDrive extends LinearOpMode {
         int powerLevel=0;
         double spinnerTimer=0;
 
-        double spinnerMax=0.8;
-        double spinnerHighMax=0.75;
-        double spinnerHigh=0.7;
-        double spinnerMediumHigh=0.65;
-        double spinnerMedium=0.6;
-        double spinnerMediumLow=0.55;
-        double spinnerLow=0.5;
+        double spinnerMax=2240;
+        double spinnerHighMax=2100;
+        double spinnerHigh=1960;
+        double spinnerMediumHigh=1820;
+        double spinnerMedium=1680;
+        double spinnerMediumLow=1540;
+        double spinnerLow=1400;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -92,21 +92,21 @@ public class mainDrive extends LinearOpMode {
                 }
 
                 if (powerLevel==0){
-                    spinner.setPower(0);
+                    spinner.setVelocity(0);
                 }else if (powerLevel==1){
-                    spinner.setPower(spinnerLow);
+                    spinner.setVelocity(spinnerLow);
                 }else if(powerLevel ==2){
-                    spinner.setPower(spinnerMediumLow);
+                    spinner.setVelocity(spinnerMediumLow);
                 } else if (powerLevel==3){
-                    spinner.setPower(spinnerMedium);
+                    spinner.setVelocity(spinnerMedium);
                 }else if (powerLevel==4){
-                    spinner.setPower(spinnerMediumHigh);
+                    spinner.setVelocity(spinnerMediumHigh);
                 }else if (powerLevel==5){
-                    spinner.setPower(spinnerHigh);
+                    spinner.setVelocity(spinnerHigh);
                 }else if (powerLevel==6){
-                    spinner.setPower(spinnerHighMax);
+                    spinner.setVelocity(spinnerHighMax);
                 }else if (powerLevel==7){
-                    spinner.setPower(spinnerMax);
+                    spinner.setVelocity(spinnerMax);
                 }
 
                 direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
