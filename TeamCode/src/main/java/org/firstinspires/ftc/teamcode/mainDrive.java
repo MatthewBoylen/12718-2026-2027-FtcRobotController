@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -20,7 +22,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name="mainDrive", group="mainDrive")
 public class mainDrive extends LinearOpMode {
-    private DcMotor frontLeft, backLeft, frontRight, backRight, spinner, intake;
+    private DcMotor frontLeft, backLeft, frontRight, backRight, intake;
+    private DcMotorEx spinner;
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
@@ -30,7 +33,7 @@ public class mainDrive extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        spinner = hardwareMap.get(DcMotor.class, "spinner");
+        spinner = hardwareMap.get(DcMotorEx.class, "spinner");
         intake = hardwareMap.get(DcMotor.class, "intake");
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -42,6 +45,11 @@ public class mainDrive extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        double spinnerP=0, spinnerI=0, spinnerD=0, spinnerF=0;
+        PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
+        spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
+
         double direction, turn, speed;//for the movement of the robot
 
         int powerLevel=0;
