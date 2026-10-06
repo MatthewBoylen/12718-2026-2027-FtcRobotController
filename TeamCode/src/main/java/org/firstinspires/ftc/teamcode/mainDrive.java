@@ -46,7 +46,7 @@ public class mainDrive extends LinearOpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        double spinnerP=0, spinnerI=0, spinnerD=0, spinnerF=0;
+        double spinnerP=18, spinnerI=0, spinnerD=0, spinnerF=16;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
