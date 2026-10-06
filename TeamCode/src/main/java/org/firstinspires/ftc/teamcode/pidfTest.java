@@ -21,13 +21,13 @@ public class pidfTest extends LinearOpMode {
         spinner.setDirection(DcMotor.Direction.REVERSE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        double spinnerP = 0, spinnerF = 0;
+        double spinnerP = 18, spinnerF = 16;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, 0, 0, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
         int TPR = 28;
 
-        double high = 5000/60.0 * TPR;
+        double high = 4500/60.0 * TPR;
         double low = 3000/60.0 * TPR;
         double curVel = 0;
         double[] step = {10,1,0.1,0.01, 0.001, 0.0001};
@@ -77,7 +77,8 @@ public class pidfTest extends LinearOpMode {
 
                 double error = curVel - spinner.getVelocity();
 
-                telemetry.addData("Speed", spinner.getVelocity()/TPR*60);
+                telemetry.addData("Current Speed", spinner.getVelocity()/TPR*60);
+                telemetry.addData("Target Speed", curVel/TPR*60);
                 telemetry.addData("Error", error/TPR*60);
                 telemetry.addData("P", spinnerP);
                 telemetry.addData("F", spinnerF);
