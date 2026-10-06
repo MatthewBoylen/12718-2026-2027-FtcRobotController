@@ -55,17 +55,11 @@ public class mainDrive extends LinearOpMode {
         int powerLevel=0;
         double spinnerTimer=0;
 
-        double spinnerMax=2240;
-        double spinnerHighMax=2100;
-        double spinnerHigh=1960;
-        double spinnerMediumHigh=1820;
-        double spinnerMedium=1680;
-        double spinnerMediumLow=1540;
-        double spinnerLow=1400;
+        double[] spinnerPower = {0,1400,1540,1680,1820,1960,2100,2240};
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        initAprilTag();
+        //initAprilTag();
         waitForStart();
 
 
@@ -83,7 +77,7 @@ public class mainDrive extends LinearOpMode {
                 if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
                     powerLevel--;
                     spinnerTimer=getRuntime();
-                } else if (this.gamepad2.right_bumper && powerLevel<7 && spinnerTimer==0) {
+                } else if (this.gamepad2.right_bumper && powerLevel < spinnerPower.length-1 && spinnerTimer==0) {
                     powerLevel++;
                     spinnerTimer=getRuntime();
                 }
@@ -91,23 +85,7 @@ public class mainDrive extends LinearOpMode {
                     spinnerTimer=0;
                 }
 
-                if (powerLevel==0){
-                    spinner.setVelocity(0);
-                }else if (powerLevel==1){
-                    spinner.setVelocity(spinnerLow);
-                }else if(powerLevel ==2){
-                    spinner.setVelocity(spinnerMediumLow);
-                } else if (powerLevel==3){
-                    spinner.setVelocity(spinnerMedium);
-                }else if (powerLevel==4){
-                    spinner.setVelocity(spinnerMediumHigh);
-                }else if (powerLevel==5){
-                    spinner.setVelocity(spinnerHigh);
-                }else if (powerLevel==6){
-                    spinner.setVelocity(spinnerHighMax);
-                }else if (powerLevel==7){
-                    spinner.setVelocity(spinnerMax);
-                }
+                spinner.setVelocity(spinnerPower[powerLevel]);
 
                 direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
                 turn = -gamepad1.right_stick_x;
@@ -116,6 +94,12 @@ public class mainDrive extends LinearOpMode {
                 frontRight.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed - turn);
                 backLeft.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed + turn);
                 backRight.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed - turn);
+
+                //adds telemetry data
+                telemetry.addData("Power Level", powerLevel);
+                telemetry.addData("Spinner Velocity", spinner.getVelocity()/28*60);
+                telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel]/28*60);
+                telemetry.update();
             }
         }
         if (visionPortal!=null){
