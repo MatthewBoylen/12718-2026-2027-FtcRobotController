@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -20,7 +22,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name="mainDrive", group="mainDrive")
 public class mainDrive extends LinearOpMode {
-    private DcMotor frontLeft, backLeft, frontRight, backRight, spinner, intake;
+    private DcMotor frontLeft, backLeft, frontRight, backRight, intake;
+    private DcMotorEx spinner;
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
@@ -30,7 +33,7 @@ public class mainDrive extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        spinner = hardwareMap.get(DcMotor.class, "spinner");
+        spinner = hardwareMap.get(DcMotorEx.class, "spinner");
         intake = hardwareMap.get(DcMotor.class, "intake");
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -42,18 +45,23 @@ public class mainDrive extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        double spinnerP=0, spinnerI=0, spinnerD=0, spinnerF=0;
+        PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
+        spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
+
         double direction, turn, speed;//for the movement of the robot
 
         int powerLevel=0;
         double spinnerTimer=0;
 
-        double spinnerMax=0.8;
-        double spinnerHighMax=0.75;
-        double spinnerHigh=0.7;
-        double spinnerMediumHigh=0.65;
-        double spinnerMedium=0.6;
-        double spinnerMediumLow=0.55;
-        double spinnerLow=0.5;
+        double spinnerMax=2240;
+        double spinnerHighMax=2100;
+        double spinnerHigh=1960;
+        double spinnerMediumHigh=1820;
+        double spinnerMedium=1680;
+        double spinnerMediumLow=1540;
+        double spinnerLow=1400;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -84,21 +92,21 @@ public class mainDrive extends LinearOpMode {
                 }
 
                 if (powerLevel==0){
-                    spinner.setPower(0);
+                    spinner.setVelocity(0);
                 }else if (powerLevel==1){
-                    spinner.setPower(spinnerLow);
+                    spinner.setVelocity(spinnerLow);
                 }else if(powerLevel ==2){
-                    spinner.setPower(spinnerMediumLow);
+                    spinner.setVelocity(spinnerMediumLow);
                 } else if (powerLevel==3){
-                    spinner.setPower(spinnerMedium);
+                    spinner.setVelocity(spinnerMedium);
                 }else if (powerLevel==4){
-                    spinner.setPower(spinnerMediumHigh);
+                    spinner.setVelocity(spinnerMediumHigh);
                 }else if (powerLevel==5){
-                    spinner.setPower(spinnerHigh);
+                    spinner.setVelocity(spinnerHigh);
                 }else if (powerLevel==6){
-                    spinner.setPower(spinnerHighMax);
+                    spinner.setVelocity(spinnerHighMax);
                 }else if (powerLevel==7){
-                    spinner.setPower(spinnerMax);
+                    spinner.setVelocity(spinnerMax);
                 }
 
                 direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
