@@ -65,7 +65,7 @@ public class mainDrive extends LinearOpMode {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        initAprilTag();
+        //initAprilTag();
         waitForStart();
 
 
@@ -128,7 +128,7 @@ public class mainDrive extends LinearOpMode {
                 .setDrawCubeProjection(true)
                 .build();
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        //builder.setCamera(hardwareMap.get(WebcamName.class, "camera"));
+        builder.setCamera(hardwareMap.get(WebcamName.class, "camera"));
         builder.setCameraResolution(new Size(640, 480));
         sleep(20);
         builder.addProcessor(aprilTag);
