@@ -40,13 +40,14 @@ public class mainDrive extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
         spinner.setDirection(DcMotor.Direction.REVERSE);
+        intake.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        double spinnerP=18, spinnerI=0, spinnerD=0, spinnerF=16;
+        double spinnerP=18, spinnerI=0, spinnerD=0, spinnerF=15.5;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
@@ -66,11 +67,12 @@ public class mainDrive extends LinearOpMode {
         if (opModeIsActive()){
             while (opModeIsActive()) {
 
-                if(this.gamepad2.x){
+                if(this.gamepad2.dpad_right){
                     intake.setPower(1);
-                }
-                else{
+                } else if (this.gamepad2.dpad_left) {
                     intake.setPower(-1);
+                } else if (this.gamepad2.dpad_down){
+                    intake.setPower(0);
                 }
 
 
