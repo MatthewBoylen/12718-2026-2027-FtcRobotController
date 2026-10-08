@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
  */
 
 @TeleOp(name="Servo Position Helper", group="Test")
-@Disabled
+//@Disabled
 public class ServoPositionHelper extends LinearOpMode {
 
     // Declare OpMode member.
