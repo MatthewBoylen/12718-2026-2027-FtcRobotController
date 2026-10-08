@@ -24,6 +24,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 public class mainDrive extends LinearOpMode {
     private DcMotor frontLeft, backLeft, frontRight, backRight, intake;
     private DcMotorEx spinner;
+    private ServoImplEx launcher;
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
@@ -47,6 +48,9 @@ public class mainDrive extends LinearOpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        launcher = hardwareMap.get(ServoImplEx.class, "launcher");
+        launcher.setPwmRange(new PwmControl.PwmRange(500,2500));
+
         double spinnerP=18, spinnerI=0, spinnerD=0, spinnerF=15.5;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
@@ -58,52 +62,60 @@ public class mainDrive extends LinearOpMode {
 
         double[] spinnerPower = {0,1400,1540,1680,1820,1960,2100,2240};
 
+        double launchPollen = 0.69, launchNectar = 0.36;
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         //initAprilTag();
         waitForStart();
 
+        launcher.setPosition(launchNectar);
 
-        if (opModeIsActive()){
-            while (opModeIsActive()) {
+        while (opModeIsActive()) {
 
-                if(this.gamepad2.dpad_right){
-                    intake.setPower(1);
-                } else if (this.gamepad2.dpad_left) {
-                    intake.setPower(-1);
-                } else if (this.gamepad2.dpad_down){
-                    intake.setPower(0);
-                }
-
-
-                if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
-                    powerLevel--;
-                    spinnerTimer=getRuntime();
-                } else if (this.gamepad2.right_bumper && powerLevel < spinnerPower.length-1 && spinnerTimer==0) {
-                    powerLevel++;
-                    spinnerTimer=getRuntime();
-                }
-                if (getRuntime()-spinnerTimer>=0.4){
-                    spinnerTimer=0;
-                }
-
-                spinner.setVelocity(spinnerPower[powerLevel]);
-
-                direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
-                turn = -gamepad1.right_stick_x;
-                speed = Math.sqrt((gamepad1.left_stick_y * gamepad1.left_stick_y) + (gamepad1.left_stick_x * gamepad1.left_stick_x));
-                frontLeft.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed + turn);
-                frontRight.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed - turn);
-                backLeft.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed + turn);
-                backRight.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed - turn);
-
-                //adds telemetry data
-                telemetry.addData("Power Level", powerLevel);
-                telemetry.addData("Spinner Velocity", spinner.getVelocity()/28*60);
-                telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel]/28*60);
-                telemetry.update();
+            if(this.gamepad2.dpad_right){
+                intake.setPower(1);
+            } else if (this.gamepad2.dpad_left) {
+                intake.setPower(-1);
+            } else if (this.gamepad2.dpad_down){
+                intake.setPower(0);
             }
+
+
+            if(this.gamepad2.left_bumper && powerLevel>0 && spinnerTimer==0){
+                powerLevel--;
+                spinnerTimer=getRuntime();
+            } else if (this.gamepad2.right_bumper && powerLevel < spinnerPower.length-1 && spinnerTimer==0) {
+                powerLevel++;
+                spinnerTimer=getRuntime();
+            }
+            if (getRuntime()-spinnerTimer>=0.4){
+                spinnerTimer=0;
+            }
+
+            if (this.gamepad2.left_trigger>0.25){
+                launcher.setPosition(launchNectar);
+            } else if (this.gamepad2.right_trigger>0.25) {
+                launcher.setPosition(launchPollen);
+            }
+
+            spinner.setVelocity(spinnerPower[powerLevel]);
+
+            direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
+            turn = -gamepad1.right_stick_x;
+            speed = Math.sqrt((gamepad1.left_stick_y * gamepad1.left_stick_y) + (gamepad1.left_stick_x * gamepad1.left_stick_x));
+            frontLeft.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed + turn);
+            frontRight.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed - turn);
+            backLeft.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed + turn);
+            backRight.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed - turn);
+
+            //adds telemetry data
+            telemetry.addData("Power Level", powerLevel);
+            telemetry.addData("Spinner Velocity", spinner.getVelocity()/28*60);
+            telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel]/28*60);
+            telemetry.update();
         }
+
         if (visionPortal!=null){
             visionPortal.close();
         }//end processes
