@@ -25,4 +25,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build application
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build --stacktrace
