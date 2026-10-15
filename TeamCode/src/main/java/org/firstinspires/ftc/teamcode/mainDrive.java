@@ -47,6 +47,7 @@ public class mainDrive extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         launcher = hardwareMap.get(ServoImplEx.class, "launcher");
         launcher.setPwmRange(new PwmControl.PwmRange(500,2500));
@@ -55,7 +56,7 @@ public class mainDrive extends LinearOpMode {
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
-        double direction, turn, speed;//for the movement of the robot
+        double direction, turn, speed, scale=0.8;//for the movement of the robot
 
         int powerLevel=0;
         double spinnerTimer=0;
@@ -99,15 +100,23 @@ public class mainDrive extends LinearOpMode {
                 launcher.setPosition(launchPollen);
             }
 
+            if(this.gamepad1.left_trigger>0.25){
+                scale=0.4;
+            } else if (this.gamepad1.right_trigger>0.25) {
+                scale=1;
+            }else {
+                scale=0.8;
+            }
+
             spinner.setVelocity(spinnerPower[powerLevel]);
 
             direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
             turn = -gamepad1.right_stick_x;
             speed = Math.sqrt((gamepad1.left_stick_y * gamepad1.left_stick_y) + (gamepad1.left_stick_x * gamepad1.left_stick_x));
-            frontLeft.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed + turn);
-            frontRight.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed - turn);
-            backLeft.setPower(Math.sin(direction - (0.25 * (Math.PI))) * speed + turn);
-            backRight.setPower(Math.sin(direction + (0.25 * (Math.PI))) * speed - turn);
+            frontLeft.setPower((Math.sin(direction + (0.25 * (Math.PI))) * speed + turn)*scale);
+            frontRight.setPower((Math.sin(direction - (0.25 * (Math.PI))) * speed - turn)*scale);
+            backLeft.setPower((Math.sin(direction - (0.25 * (Math.PI))) * speed + turn)*scale);
+            backRight.setPower((Math.sin(direction + (0.25 * (Math.PI))) * speed - turn)*scale);
 
             //adds telemetry data
             telemetry.addData("Power Level", powerLevel);
