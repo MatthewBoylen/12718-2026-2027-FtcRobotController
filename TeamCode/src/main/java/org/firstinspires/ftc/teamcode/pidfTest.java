@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp(name="pidfTest", group="test")
+@TeleOp(name="pidfTest", group="Test")
 public class pidfTest extends LinearOpMode {
     private DcMotorEx spinner;
 
