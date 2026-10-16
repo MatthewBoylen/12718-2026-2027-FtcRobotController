@@ -105,8 +105,8 @@ public class mainDrive extends LinearOpMode {
 
       spinner.setVelocity(spinnerPower[powerLevel]);
 
-      direction = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
-      turn = -gamepad1.right_stick_x;
+      direction = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x);
+      turn = gamepad1.right_stick_x;
       speed =
           Math.sqrt(
               (gamepad1.left_stick_y * gamepad1.left_stick_y)
