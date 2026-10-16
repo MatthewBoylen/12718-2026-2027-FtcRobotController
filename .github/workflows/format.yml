@@ -22,6 +22,7 @@ jobs:
       - uses: axel-op/googlejavaformat-action@v4
         with:
           args: "--skip-sorting-imports --replace"
+          files: "/teamcode/src/main/java/org/firstinspires/ftc/teamcode/mainDrive.java"
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
