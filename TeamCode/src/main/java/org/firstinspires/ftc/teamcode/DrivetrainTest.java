@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="DrivetrainTest",group = "Test")
 public class DrivetrainTest extends LinearOpMode {
@@ -36,30 +35,69 @@ public class DrivetrainTest extends LinearOpMode {
                 index++;
             }
 
-            if (index==0){
+            if(index==0){
+                telemetry.addData("Will Test", "frontLeft");
+                telemetry.update();
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+            } else if (index==1){
                 telemetry.addData("Testing", "frontLeft");
+                telemetry.update();
                 frontLeft.setPower(1);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
                 backRight.setPower(0);
-            } else if (index==1) {
+            } else if (index==2) {
+                telemetry.addData("Will Test", "frontRight");
+                telemetry.update();
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+            } else if (index==3) {
                 telemetry.addData("Testing", "frontRight");
+                telemetry.update();
                 frontLeft.setPower(0);
                 frontRight.setPower(1);
                 backLeft.setPower(0);
                 backRight.setPower(0);
-            } else if (index==2) {
+            } else if (index==4) {
+                telemetry.addData("Will Test", "backLeft");
+                telemetry.update();
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+            } else if (index==5) {
                 telemetry.addData("Testing", "backLeft");
+                telemetry.update();
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(1);
                 backRight.setPower(0);
-            } else if (index==3) {
+            } else if (index==6) {
+                telemetry.addData("Will Test", "backRight");
+                telemetry.update();
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+            } else if (index==7) {
                 telemetry.addData("Testing", "backRight");
+                telemetry.update();
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
                 backRight.setPower(1);
+            } else {
+                telemetry.addData("Status", "Finished");
+                telemetry.update();
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
             }
         }
     }
