@@ -15,6 +15,8 @@ import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+import static java.lang.Math.tan;
+
 import com.pedropathing.paths.Path;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -47,11 +49,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessorImpl;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.vision.opencv.Circle;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import com.qualcomm.robotcore.hardware.PwmControl;
 @Autonomous
@@ -66,22 +70,41 @@ public class RedAuto1 extends LinearOpMode {
     private DcMotor intake, launcher;
     private Follower follower;
     private final PoseFactory p = PoseFactory.degrees();
+    private class ball{
+        private double x;
+        private double y;
+        private int weight;//this is for the importance of the ball, pollen or nectar
+        public ball(double a,double b, int importance){
+            x = a;
+            y = b;
+            weight = importance;
+        }
+    }
+    private ArrayList<ball> ballLocations = new ArrayList<>();
 
 
     //Poses
-    private final Pose startPose = p.of(24, 24, 0);
-    private final Pose score1Pose = p.of(48, 48, 90);
-    private final Pose flower1Pose = p.of(48, 48, 90);
+    private final Pose startPose = p.of(58, 8, 90);
+    private final Pose score1Pose = p.of(58, 8, 90);
+    private final Pose flower1Pose = p.of(11, 47, 90);
+    private final Pose score2Pose = p.of(58,134,270);
+    private final Pose flower2Pose = p.of(47,127,270);
 
     //Paths
     private Path startToScore1() {return line(startPose, score1Pose).linear(startPose, score1Pose);}
     private Path score1ToFlower1() {return line(score1Pose, flower1Pose).linear(score1Pose, flower1Pose);}
+    private Path flower1ToScore2() {return line(flower1Pose, score2Pose).linear(flower1Pose, score2Pose);}
+    private Path score2ToFlower2() {return line(score2Pose, flower2Pose).linear(score2Pose, flower2Pose);}
+    private Path flower2ToScore2() {return line(flower2Pose, score2Pose).linear(flower2Pose, score2Pose);}
 
     private Command autoRoutine() {
         return sequential(
                 follow(follower, startToScore1()),
                 // Add mechanism commands here.
-                follow(follower, score1ToFlower1())
+                follow(follower, score1ToFlower1()),
+                follow(follower, flower1ToScore2()),
+                follow(follower, score2ToFlower2()),
+                follow(follower, flower2ToScore2())
         );
     }
 
@@ -106,7 +129,7 @@ public class RedAuto1 extends LinearOpMode {
         if (visionPortal!=null){
             visionPortal.close();
         }//end processes
-        sleep(50);
+        sleep(100);
     }
     private void initAprilTagAndColorBlob(){
         aprilTag = new AprilTagProcessor.Builder().setDrawCubeProjection(true).build();
@@ -201,6 +224,16 @@ public class RedAuto1 extends LinearOpMode {
         else if (basket1Height/basket1NumberOfDetections<basket2Height/basket2NumberOfDetections){
             basket1Active=false;
             basket2Active=true;
+        }
+    }
+    private void findBalls(){
+        List<ColorBlobLocatorProcessor.Blob> redBlobs = colorLocatorRed.getBlobs();
+        for (ColorBlobLocatorProcessor.Blob rb : redBlobs){
+            Circle c = rb.getCircle();
+            double x = c.getX();
+            double y = c.getY();
+            double radius = c.getRadius();
+
         }
     }
     private void launchBalls(){
