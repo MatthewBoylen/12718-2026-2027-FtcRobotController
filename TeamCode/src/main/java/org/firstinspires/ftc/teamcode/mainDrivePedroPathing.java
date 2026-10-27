@@ -87,7 +87,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 scale = 0.8;
             }
 
-            ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, gamepad1.left_stick_x*scale, gamepad1.right_stick_x*scale);
+            ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
             follower.update();
 
             spinner.setVelocity(spinnerPower[powerLevel]);

@@ -91,7 +91,7 @@ public class RedAuto1 extends LinearOpMode {
     private final Pose flower2Pose = p.of(47,127,270);
 
     //Paths
-    private Path startToScore1() {return line(startPose, score1Pose).linear(startPose, score1Pose);}
+    //private Path startToScore1() {return line(startPose, score1Pose).linear(startPose, score1Pose);}
     private Path score1ToFlower1() {return line(score1Pose, flower1Pose).linear(score1Pose, flower1Pose);}
     private Path flower1ToScore2() {return line(flower1Pose, score2Pose).linear(flower1Pose, score2Pose);}
     private Path score2ToFlower2() {return line(score2Pose, flower2Pose).linear(score2Pose, flower2Pose);}
@@ -99,7 +99,7 @@ public class RedAuto1 extends LinearOpMode {
 
     private Command autoRoutine() {
         return sequential(
-                follow(follower, startToScore1()),
+                //follow(follower, startToScore1()),
                 // Add mechanism commands here.
                 follow(follower, score1ToFlower1()),
                 follow(follower, flower1ToScore2()),
@@ -115,7 +115,7 @@ public class RedAuto1 extends LinearOpMode {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
         follower.setPose(startPose);
-        initAprilTagAndColorBlob();
+        //initAprilTagAndColorBlob();
         waitForStart();
 
         if (opModeIsActive()){
