@@ -86,8 +86,8 @@ public class RedAuto1 extends LinearOpMode {
     //Poses
     private final Pose startPose = p.of(58, 8, 90);
     private final Pose score1Pose = p.of(58, 8, 90);
-    private final Pose flower1Pose = p.of(11, 47, 90);
-    private final Pose score2Pose = p.of(58,134,270);
+    private final Pose flower1Pose = p.of(13, 47, 90);
+    private final Pose score2Pose = p.of(58,128,270);
     private final Pose flower2Pose = p.of(47,127,270);
 
     //Paths
