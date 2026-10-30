@@ -96,7 +96,7 @@ public class mainDrivePedroPathingFeildStationary extends LinearOpMode {
                     -gamepad1.right_stick_x*scale,
                     follower.pose().heading()
             );
-            follower.manual(powers);
+            ManualDrive.driveOrHold(follower,powers);
             follower.update();
 
             spinner.setVelocity(spinnerPower[powerLevel]);
