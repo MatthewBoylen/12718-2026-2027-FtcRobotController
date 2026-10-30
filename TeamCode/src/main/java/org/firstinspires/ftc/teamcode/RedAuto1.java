@@ -123,8 +123,6 @@ public class RedAuto1 extends LinearOpMode {
             while (opModeIsActive()) {
                 follower.update();
                 Scheduler.execute();
-                String drivetrainString = follower.debug().drivetrain().toString();
-                telemetry.addLine(drivetrainString);
                 String localizerString = follower.debug().localizer().toString();
                 telemetry.addLine(localizerString);
                 String algorithmString = follower.debug().algorithm().toString();
