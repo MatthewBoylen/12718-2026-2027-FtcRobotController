@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -37,6 +38,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
         double scale = 0.8; // for the movement of the robot
         follower = Constants.create(hardwareMap);
+        final PoseFactory p = PoseFactory.degrees();
 
         int powerLevel = 0;
         double spinnerTimer = 0;
@@ -44,6 +46,8 @@ public class mainDrivePedroPathing extends LinearOpMode {
         double[] spinnerPower = {0, 1400, 1540, 1680, 1820, 1960, 2100, 2240};
 
         double launchPollen = 0.69, launchNectar = 0.36;
+
+        follower.setPose(p.of(58, 8, 90));
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -95,6 +99,9 @@ public class mainDrivePedroPathing extends LinearOpMode {
             telemetry.addData("Power Level", powerLevel);
             telemetry.addData("Spinner Velocity", spinner.getVelocity() / 28 * 60);
             telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel] / 28 * 60);
+            telemetry.addData("x", follower.pose().x());
+            telemetry.addData("y", follower.pose().y());
+            telemetry.addData("rotation", follower.pose().heading());
             telemetry.update();
         }
     }
