@@ -26,17 +26,17 @@ public class autoTest extends LinearOpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(58, 8.8082, 90);
-    private final Pose path1 = poseFactory.of(9.6182, 47.046, 0);
+    private final Pose path1 = poseFactory.of(16, 45, 0);
     private final Pose path1Control1 = poseFactory.of(1.0562, 49.5076, 0);
     private final Pose path1Control2 = poseFactory.of(27.4283, 47.4044, 0);
-    private final Pose point2Start = poseFactory.of(9.6182, 47.046, 0);
-    private final Pose point2 = poseFactory.of(57.8595, 128.3928, 270);
+    private final Pose point2Start = poseFactory.of(16, 45, 0);
+    private final Pose point2 = poseFactory.of(59, 126, 270);
     private final Pose point2Control1 = poseFactory.of(26.1315, 47.5703, 0);
     private final Pose point2Control2 = poseFactory.of(5.2327, 38.0072, 0);
     private final Pose point2Control3 = poseFactory.of(28.1628, 99.3134, 0);
-    private final Pose point3Start = poseFactory.of(57.8595, 128.3928, 270);
-    private final Pose point3 = poseFactory.of(46.7241, 133.0807, 270);
-    private final Pose point3Control1 = poseFactory.of(45.2605, 124.7094, 0);
+    private final Pose point3Start = poseFactory.of(59, 126, 270);
+    private final Pose point3 = poseFactory.of(47, 127, 270);
+    private final Pose point3Control1 = poseFactory.of(45.3738, 122.5563, 0);
 
     // Autonomous routine
     public Command autoRoutine() {
