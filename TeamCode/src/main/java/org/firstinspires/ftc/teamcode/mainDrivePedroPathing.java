@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
-@TeleOp(name="mainDrivePedro", group="Experemental")
+@TeleOp(name="mainDrive", group="mainDrive")
 public class mainDrivePedroPathing extends LinearOpMode {
     private DcMotor intake;
     private Follower follower;
@@ -32,7 +32,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
         launcher = hardwareMap.get(ServoImplEx.class, "launcher");
         launcher.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
-        double spinnerP = 18, spinnerI = 0, spinnerD = 0, spinnerF = 15.5;
+        double spinnerP = 18, spinnerI = 0, spinnerD = 0, spinnerF = 14;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
 
@@ -43,7 +43,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
         int powerLevel = 0;
         double spinnerTimer = 0;
 
-        double[] spinnerPower = {0, 1400, 1540, 1680, 1820, 1960, 2100, 2240};
+        double[] spinnerPower = {0, 2900, 3000, 3300, 3600, 3900, 4200};
 
         double launchPollen = 0.69, launchNectar = 0.36;
 
@@ -94,11 +94,11 @@ public class mainDrivePedroPathing extends LinearOpMode {
             ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
             follower.update();
 
-            spinner.setVelocity(spinnerPower[powerLevel]);
+            spinner.setVelocity(spinnerPower[powerLevel]/60.0*28);
 
             telemetry.addData("Power Level", powerLevel);
             telemetry.addData("Spinner Velocity", spinner.getVelocity() / 28 * 60);
-            telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel] / 28 * 60);
+            telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel]);
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
             telemetry.addData("rotation", follower.pose().heading());
