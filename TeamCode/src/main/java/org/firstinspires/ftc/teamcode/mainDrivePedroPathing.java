@@ -45,7 +45,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
         double[] spinnerPower = {0, 2900, 3000, 3300, 3600, 3900, 4200};
 
-        double launchPollen = 0.69, launchNectar = 0.36;
+        double launchPollen = 0.22, launchNectar = 0.43;
 
         follower.setPose(p.of(58, 8, 90));
 
@@ -101,7 +101,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
             telemetry.addData("Spinner Target Velocity", spinnerPower[powerLevel]);
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
-            telemetry.addData("rotation", follower.pose().heading());
+            telemetry.addData("rotation", Math.toDegrees(follower.pose().heading()));
             telemetry.update();
         }
     }
