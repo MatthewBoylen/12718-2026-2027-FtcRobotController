@@ -78,24 +78,28 @@ public class mainDrivePedroPathing extends LinearOpMode {
         launcherBackplate.setPosition(launchNectar);
 
         while(opModeIsActive()){
-            if(this.gamepad2.left_trigger_pressed){
+            if(this.gamepad2.left_trigger>=0.03){
                 //forward direction
-                transfer0.setPower(1);
-                transfer1.setPower(1);
-                transfer2.setPower(1);
-            } else if (this.gamepad2.right_trigger_pressed) {
+                transfer0.setPower(-this.gamepad2.left_trigger);
+                transfer1.setPower(-this.gamepad2.left_trigger);
+                transfer2.setPower(-this.gamepad2.left_trigger);
+            } else if (this.gamepad2.right_trigger>=0.03) {
                 //reverse direction
-                transfer0.setPower(-1);
-                transfer1.setPower(-1);
-                transfer2.setPower(-1);
+                transfer0.setPower(this.gamepad2.right_trigger);
+                transfer1.setPower(this.gamepad2.right_trigger);
+                transfer2.setPower(this.gamepad2.right_trigger);
             } else {
                 transfer0.setPower(0);
                 transfer1.setPower(0);
                 transfer2.setPower(0);
             }
 
-            if (this.gamepad2.a){
+            if (this.gamepad2.a && intake.getPower()<=0){
                 //must be opposite for them to push in same direction
+                launcher0.setPower(-1);
+                launcher1.setPower(1);
+            } else if (intake.getPower()>0) {
+                //must be opposite of before, used to prevent launch during intake
                 launcher0.setPower(1);
                 launcher1.setPower(-1);
             } else {
