@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Math.atan2;
+
 import com.pedropathing.api.PoseFactory;
+import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
+import com.pedropathing.math.Pose;
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
@@ -141,6 +146,29 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 scale = 1;
             } else {
                 scale = 0.8;
+            }
+
+
+            //Reset positioning
+            if(this.gamepad1.a){
+                Pose cornerPose = new Pose(10.5, 10.5, Math.toRadians(90));
+                follower.setPose(cornerPose);
+            }
+            //rotate to goal, one side, 58,58 is the goal but will need to change
+            if(this.gamepad1.b){
+                double angle = atan2(follower.pose().y()-58,follower.pose().x()-58);
+                DrivePowers powers = ManualDrive.fieldCentric(
+                        -gamepad1.left_stick_y,
+                        gamepad1.left_stick_x,
+                        gamepad1.right_stick_x,
+                        angle
+                );
+                ManualDrive.driveOrHold(follower, powers);
+                follower.update();
+            }
+            //rotate to goal, other side
+            if(this.gamepad1.x){
+
             }
 
             ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
