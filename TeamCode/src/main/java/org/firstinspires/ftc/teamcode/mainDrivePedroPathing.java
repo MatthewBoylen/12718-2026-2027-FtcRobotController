@@ -88,7 +88,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
         launcherBackplate.setPosition(launchNectar);
 
         while(opModeIsActive()){
-            override= this.gamepad2.y;
+            override = this.gamepad2.y;
 
             if(this.gamepad2.left_trigger>=0.03){
                 //forward direction
@@ -113,38 +113,24 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 override=false;
                 pass=false;
             } else if (powerLevel==0 && launcher0.getPower()<0.9){
-                launcher0.setPower(0);
-                launcher1.setPower(0);
                 pass=false;
                 override=false;
             } else if(nectarLaunch && !override){
                 if(color0.red()>=pollenRed && color0.green()>=pollenGrn && color0.blue()>=pollenBlu && color0.getDistance(DistanceUnit.CM)<=2.0){
-                    launcher0.setPower(0);
-                    launcher1.setPower(0);
                     pass=false;
                 } else if(color1.red()>=pollenRed && color1.green()>=pollenGrn && color1.blue()>=pollenBlu && color1.getDistance(DistanceUnit.CM)<=2.0){
-                    launcher0.setPower(0);
-                    launcher1.setPower(0);
                     pass=false;
                 } else {
                     pass=true;
                 }
             } else if (!nectarLaunch && !override) {
                 if(color0.red()>=redNectarRed && color0.red()<=pollenRed-100 && color0.green()>=redNectarGrn && color0.green()<=pollenGrn-100 && color0.blue()>=redNectarBlu && color0.blue()<=pollenBlu-100 && color0.getDistance(DistanceUnit.CM)<=2.0){
-                    launcher0.setPower(0);
-                    launcher1.setPower(0);
                     pass=false;
                 } else if(color1.red()>=redNectarRed && color1.red()<=pollenRed-100 && color1.green()>=redNectarGrn && color1.green()<=pollenGrn-100 && color1.blue()>=redNectarBlu && color1.blue()<=pollenBlu-100 && color1.getDistance(DistanceUnit.CM)<=2.0){
-                    launcher0.setPower(0);
-                    launcher1.setPower(0);
                     pass=false;
                 } else if(color0.red()>=blueNectarRed && color0.red()<=pollenRed-100 && color0.green()>=blueNectarGrn && color0.green()<=pollenGrn-100 && color0.blue()>=blueNectarBlu && color0.blue()<=pollenBlu-100 && color0.getDistance(DistanceUnit.CM)<=2.0){
-                    launcher0.setPower(0);
-                    launcher1.setPower(0);
                     pass=false;
                 } else if(color1.red()>=blueNectarRed && color1.red()<=pollenRed-100 && color1.green()>=blueNectarGrn && color1.green()<=pollenGrn-100 && color1.blue()>=blueNectarBlu && color1.blue()<=pollenBlu-100 && color1.getDistance(DistanceUnit.CM)<=2.0){
-                    launcher0.setPower(0);
-                    launcher1.setPower(0);
                     pass=false;
                 } else {
                     pass=true;
@@ -155,10 +141,10 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 //must be opposite for them to push in same direction
                 launcher0.setPower(-1);
                 launcher1.setPower(1);
-            } else if (!override) {
+            } else if (!override && launcher0.getPower()<0.9) {
                 launcher0.setPower(0);
                 launcher1.setPower(0);
-            } else if (this.gamepad2.a && intake.getPower()<=0 && override){
+            } else if (intake.getPower()<=0 && override){
                 launcher0.setPower(-1);
                 launcher1.setPower(1);
             }
