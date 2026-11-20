@@ -8,6 +8,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
@@ -17,6 +18,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @TeleOp(name="mainDrive", group="mainDrive")
@@ -26,13 +28,14 @@ public class mainDrivePedroPathing extends LinearOpMode {
     private DcMotorEx spinner;
     private ServoImplEx launcherBackplate, flower0, flower1;
     private CRServoImplEx transfer0, transfer1, transfer2, launcher0, launcher1;
+    private RevColorSensorV3 color0, color1;
 
     @Override
     public void runOpMode(){
         spinner = hardwareMap.get(DcMotorEx.class, "spinner");
         intake = hardwareMap.get(DcMotor.class, "intake");
         spinner.setDirection(DcMotor.Direction.REVERSE);
-        intake.setDirection(DcMotor.Direction.REVERSE);
+        intake.setDirection(DcMotor.Direction.FORWARD);
         spinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -54,6 +57,9 @@ public class mainDrivePedroPathing extends LinearOpMode {
         launcher0.setPwmRange(new PwmControl.PwmRange(500, 2500));
         launcher1.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
+        color0 = hardwareMap.get(RevColorSensorV3.class, "color0");
+        color1 = hardwareMap.get(RevColorSensorV3.class, "color1");
+
         double spinnerP = 18, spinnerI = 0, spinnerD = 0, spinnerF = 14;
         PIDFCoefficients pidfSpinner = new PIDFCoefficients(spinnerP, spinnerI, spinnerD, spinnerF);
         spinner.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfSpinner);
@@ -67,7 +73,11 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
         double[] spinnerPower = {0, 2900, 3000, 3300, 3600, 3900, 4200};
 
-        double launchPollen = 0.22, launchNectar = 0.43, flowerPickup0Up=0, flowerPickUp1Up=0, flowerPickup0Down=0, flowerPickUp1Down=0;
+        double launchPollen = 0.53, launchNectar = 0.1, flowerPickup0Up=0, flowerPickUp1Up=0, flowerPickup0Down=0, flowerPickUp1Down=0;
+
+        double redNectarRed=1500, redNectarGrn=800, redNectarBlu=700, blueNectarRed=200, blueNectarGrn=500, blueNectarBlu=1600, pollenRed=1700, pollenGrn=3000, pollenBlu=800;
+
+        boolean nectarLaunch=true, pass=true;
 
         follower.setPose(p.of(58, 8, 90));
 
@@ -94,14 +104,49 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 transfer2.setPower(0);
             }
 
-            if (this.gamepad2.a && intake.getPower()<=0){
-                //must be opposite for them to push in same direction
-                launcher0.setPower(-1);
-                launcher1.setPower(1);
-            } else if (intake.getPower()>0) {
+            if (intake.getPower()>0) {
                 //must be opposite of before, used to prevent launch during intake
                 launcher0.setPower(1);
                 launcher1.setPower(-1);
+                pass=false;
+            } else if(nectarLaunch){
+                if(color0.red()>=pollenRed && color0.green()>=pollenGrn && color0.blue()>=pollenBlu && color0.getDistance(DistanceUnit.CM)<=2.0){
+                    launcher0.setPower(0);
+                    launcher1.setPower(0);
+                    pass=false;
+                } else if(color1.red()>=pollenRed && color1.green()>=pollenGrn && color1.blue()>=pollenBlu && color1.getDistance(DistanceUnit.CM)<=2.0){
+                    launcher0.setPower(0);
+                    launcher1.setPower(0);
+                    pass=false;
+                } else {
+                    pass=true;
+                }
+            } else if (!nectarLaunch) {
+                if(color0.red()>=redNectarRed && color0.green()>=redNectarGrn && color0.blue()>=redNectarBlu && color0.getDistance(DistanceUnit.CM)<=2.0){
+                    launcher0.setPower(0);
+                    launcher1.setPower(0);
+                    pass=false;
+                } else if(color1.red()>=redNectarRed && color1.green()>=redNectarGrn && color1.blue()>=redNectarBlu && color1.getDistance(DistanceUnit.CM)<=2.0){
+                    launcher0.setPower(0);
+                    launcher1.setPower(0);
+                    pass=false;
+                } else if(color0.red()>=blueNectarRed && color0.green()>=blueNectarGrn && color0.blue()>=blueNectarBlu && color0.getDistance(DistanceUnit.CM)<=2.0){
+                    launcher0.setPower(0);
+                    launcher1.setPower(0);
+                    pass=false;
+                } else if(color1.red()>=blueNectarRed && color1.green()>=blueNectarGrn && color1.blue()>=blueNectarBlu && color1.getDistance(DistanceUnit.CM)<=2.0){
+                    launcher0.setPower(0);
+                    launcher1.setPower(0);
+                    pass=false;
+                } else {
+                    pass=true;
+                }
+            }
+
+            if (this.gamepad2.a && intake.getPower()<=0 && pass){
+                //must be opposite for them to push in same direction
+                launcher0.setPower(-1);
+                launcher1.setPower(1);
             } else {
                 launcher0.setPower(0);
                 launcher1.setPower(0);
@@ -138,10 +183,12 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 spinnerTimer = 0;
             }
 
-            if (this.gamepad2.left_trigger > 0.25) {
+            if (this.gamepad2.left_stick_button) {
                 launcherBackplate.setPosition(launchNectar);
-            } else if (this.gamepad2.right_trigger > 0.25) {
+                nectarLaunch=true;
+            } else if (this.gamepad2.right_stick_button) {
                 launcherBackplate.setPosition(launchPollen);
+                nectarLaunch=false;
             }
 
             if (this.gamepad1.left_trigger > 0.25) {
@@ -154,12 +201,12 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
 
             //Reset positioning
-            if(this.gamepad1.a){
+            /*if(this.gamepad1.a){
                 Pose cornerPose = new Pose(10.5, 10.5, Math.toRadians(90));
                 follower.setPose(cornerPose);
-            }
+            }*/
             //rotate to goal, one side, 58,58 is the goal but will need to change
-            if(this.gamepad1.b){
+           /* if(this.gamepad1.b){
                 double angle = atan2(follower.pose().y()-58,follower.pose().x()-58);
                 DrivePowers powers = ManualDrive.fieldCentric(
                         -gamepad1.left_stick_y,
@@ -173,7 +220,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
             //rotate to goal, other side
             if(this.gamepad1.x){
 
-            }
+            }*/
 
             ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
             follower.update();
@@ -186,6 +233,9 @@ public class mainDrivePedroPathing extends LinearOpMode {
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
             telemetry.addData("rotation", Math.toDegrees(follower.pose().heading()));
+            telemetry.addData("red", color0.red());
+            telemetry.addData("green", color0.green());
+            telemetry.addData("blue", color0.blue());
             telemetry.update();
         }
     }
