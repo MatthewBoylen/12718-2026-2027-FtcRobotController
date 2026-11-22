@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.pedropathing.api.Paths.line;
 import static java.lang.Math.atan2;
 
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
+import com.pedropathing.ivy.Scheduler;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -29,6 +33,10 @@ public class mainDrivePedroPathing extends LinearOpMode {
     private ServoImplEx launcherBackplate, flower0, flower1;
     private CRServoImplEx transfer0, transfer1, transfer2, launcher0, launcher1;
     private RevColorSensorV3 color0, color1;
+
+    private final PoseFactory p = PoseFactory.degrees();
+
+    private Path positionToScore() {return line(follower.pose(), p.of(58,58,90)).linear(follower.pose(), p.of(58,58,90));}
 
     @Override
     public void runOpMode(){
@@ -66,7 +74,6 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
         double scale; // for the movement of the robot
         follower = Constants.create(hardwareMap);
-        final PoseFactory p = PoseFactory.degrees();
 
         int powerLevel = 0;
         double spinnerTimer = 0;
@@ -219,7 +226,17 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
             }*/
 
-            ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
+            //code to run to goal position
+            if (this.gamepad1.bWasPressed()){
+                Scheduler.reset();
+                Scheduler.schedule(sequential(follow(follower,positionToScore())));
+                Scheduler.execute();
+            } else if (this.gamepad1.b){
+                Scheduler.execute();
+            } else{
+                ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
+            }
+
             follower.update();
 
             spinner.setVelocity(spinnerPower[powerLevel]/60.0*28);
