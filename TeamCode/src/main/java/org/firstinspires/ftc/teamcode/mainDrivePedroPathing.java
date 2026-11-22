@@ -36,8 +36,6 @@ public class mainDrivePedroPathing extends LinearOpMode {
 
     private final PoseFactory p = PoseFactory.degrees();
 
-    private Path positionToScore() {return line(follower.pose(), p.of(58,58,90)).linear(follower.pose(), p.of(58,58,90));}
-
     @Override
     public void runOpMode(){
         spinner = hardwareMap.get(DcMotorEx.class, "spinner");
@@ -229,7 +227,7 @@ public class mainDrivePedroPathing extends LinearOpMode {
             //code to run to goal position
             if (this.gamepad1.bWasPressed()){
                 Scheduler.reset();
-                Scheduler.schedule(sequential(follow(follower,positionToScore())));
+                Scheduler.schedule(sequential(follow(follower,line(follower.pose(), p.of(58,58,90)).linear(follower.pose(), p.of(58,58,90)))));
                 Scheduler.execute();
             } else if (this.gamepad1.b){
                 Scheduler.execute();
