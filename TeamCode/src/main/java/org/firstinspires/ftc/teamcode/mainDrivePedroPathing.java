@@ -117,6 +117,9 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 launcher1.setPower(-1);
                 override=false;
                 pass=false;
+            } else if (intake.getPower()<=0 && launcher0.getPower()>0.9){
+                launcher0.setPower(0);
+                launcher1.setPower(0);
             } else if (powerLevel==0 && launcher0.getPower()<0.9){
                 pass=false;
                 override=false;
@@ -129,13 +132,13 @@ public class mainDrivePedroPathing extends LinearOpMode {
                     pass=true;
                 }
             } else if (!nectarLaunch && !override) {
-                if(color0.red()>=redNectarRed && color0.red()<=pollenRed-100 && color0.green()>=redNectarGrn && color0.green()<=pollenGrn-100 && color0.blue()>=redNectarBlu && color0.blue()<=pollenBlu-100 && color0.getDistance(DistanceUnit.CM)<=2.0){
+                if(color0.red()>=redNectarRed && color0.green()>=redNectarGrn && color0.green()<=pollenGrn-100 && color0.blue()>=redNectarBlu && color0.blue()<=pollenBlu-100 && color0.getDistance(DistanceUnit.CM)<=2.0){
                     pass=false;
-                } else if(color1.red()>=redNectarRed && color1.red()<=pollenRed-100 && color1.green()>=redNectarGrn && color1.green()<=pollenGrn-100 && color1.blue()>=redNectarBlu && color1.blue()<=pollenBlu-100 && color1.getDistance(DistanceUnit.CM)<=2.0){
+                } else if(color1.red()>=redNectarRed && color1.green()>=redNectarGrn && color1.green()<=pollenGrn-100 && color1.blue()>=redNectarBlu && color1.blue()<=pollenBlu-100 && color1.getDistance(DistanceUnit.CM)<=2.0){
                     pass=false;
-                } else if(color0.red()>=blueNectarRed && color0.red()<=pollenRed-100 && color0.green()>=blueNectarGrn && color0.green()<=pollenGrn-100 && color0.blue()>=blueNectarBlu && color0.blue()<=pollenBlu-100 && color0.getDistance(DistanceUnit.CM)<=2.0){
+                } else if(color0.red()>=blueNectarRed && color0.green()>=blueNectarGrn && color0.green()<=pollenGrn-100 && color0.blue()>=blueNectarBlu && color0.blue()<=pollenBlu-100 && color0.getDistance(DistanceUnit.CM)<=2.0){
                     pass=false;
-                } else if(color1.red()>=blueNectarRed && color1.red()<=pollenRed-100 && color1.green()>=blueNectarGrn && color1.green()<=pollenGrn-100 && color1.blue()>=blueNectarBlu && color1.blue()<=pollenBlu-100 && color1.getDistance(DistanceUnit.CM)<=2.0){
+                } else if(color1.red()>=blueNectarRed && color1.green()>=blueNectarGrn && color1.green()<=pollenGrn-100 && color1.blue()>=blueNectarBlu && color1.blue()<=pollenBlu-100 && color1.getDistance(DistanceUnit.CM)<=2.0){
                     pass=false;
                 } else {
                     pass=true;
@@ -202,28 +205,6 @@ public class mainDrivePedroPathing extends LinearOpMode {
             }
 
 
-            //Reset positioning
-            /*if(this.gamepad1.a){
-                Pose cornerPose = new Pose(10.5, 10.5, Math.toRadians(90));
-                follower.setPose(cornerPose);
-            }*/
-            //rotate to goal, one side, 58,58 is the goal but will need to change
-           /* if(this.gamepad1.b){
-                double angle = atan2(follower.pose().y()-58,follower.pose().x()-58);
-                DrivePowers powers = ManualDrive.fieldCentric(
-                        -gamepad1.left_stick_y,
-                        gamepad1.left_stick_x,
-                        gamepad1.right_stick_x,
-                        angle
-                );
-                ManualDrive.driveOrHold(follower, powers);
-                follower.update();
-            }
-            //rotate to goal, other side
-            if(this.gamepad1.x){
-
-            }*/
-
             //code to run to goal position
             if (this.gamepad1.bWasPressed()){
                 Scheduler.reset();
@@ -233,6 +214,11 @@ public class mainDrivePedroPathing extends LinearOpMode {
                 Scheduler.execute();
             } else{
                 ManualDrive.driveOrHold(follower,-gamepad1.left_stick_y*scale, -gamepad1.left_stick_x*scale, -gamepad1.right_stick_x*scale);
+            }
+
+            //reset position
+            if (this.gamepad1.xWasPressed()){
+                follower.setPose(p.of(10.5, 10.5, 90));
             }
 
             follower.update();
